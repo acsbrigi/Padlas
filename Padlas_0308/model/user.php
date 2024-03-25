@@ -19,9 +19,9 @@ session_start();
 
     public function __construct($db){ // a topic osztály konstruktora,ami egy paraméteres konstruktor.
         if (empty($db)){
+
           throw new Exception("Hibás adatbázis kapcsolat");
-          $apperror = new AppError();
-          $apperror->showModal("Nem sikerült kapcsolódni az adatbázishoz", "Hibás adatbázis kapcsolat!");
+
         }
         $this->dbconn = $db;
     }
@@ -34,11 +34,7 @@ session_start();
             $jelszo = trim($_POST["password"]);
             if(empty($felhasznalonev) || empty($jelszo))
             {
-                $type="Bejelentkezési hiba!";
-                $msg="Minden adatot kötelező megadni!";
-                $apperror = new AppError();
-                $apperror ->showModal($msg, $type);
-                $apperror ->PutLog($msg); 
+                throw new Exception("Minden adatot kötelező megadni!"); 
                 
             }
 
@@ -50,11 +46,7 @@ session_start();
             $queryLogin->execute();
             if($queryLogin->rowCount() != 1){
 
-                $type="Bejelentkezési hiba!";
-                $msg="Hibás felhasználói azonosító! Kérem, adja meg újra a felhasználói azonosítóját!";
-                $apperror = new AppError();
-                $apperror->showModal($msg, $type);
-                $apperror->PutLog($msg);
+                throw new Exception("Hibás felhasználói azonosító! Kérem, adja meg a helyes azonosítót!"); 
             
                 
             }
@@ -64,17 +56,13 @@ session_start();
             if($jelszo != $felhasznalo2["jelszo"])
             {
 
-                $type="Bejelentkezési hiba!";
-                $msg="Hibás jelszó! Kérem, adja meg újra a jelszavát!";
-                $apperror = new AppError();
-                $apperror->showModal($msg, $type);
-                $apperror->PutLog($msg);
+                throw new Exception("Hibás jelszó! Kérem, adja meg újra a jelszavát!"); 
             }
             
-            $_SESSION["user"] = array("felhasznalonev"=>$felhasznalo2["username"], "fullname"=>$felhasznalo2["fullname"], "id"=>$felhasznalo2["id"], "moderator"=>$felhasznalo2["moderator"]); // itt megítjuk a session-t, hogy milyen adatokat adjon vissza
+            //$_SESSION["user"] = array("felhasznalonev"=>$felhasznalo2["username"], "fullname"=>$felhasznalo2["fullname"], "id"=>$felhasznalo2["id"], "moderator"=>$felhasznalo2["moderator"]); // itt megítjuk a session-t, hogy milyen adatokat adjon vissza
             //létrehozok egy sessiont, aminek változója a "user" és a session user változójába berakok egy tömböt, mely tömb a felhasznalo2 változóba tárolt bejelentkezési adatokat adja vissza. 
 
-            setcookie("id", $felhasznalo2["id"],time()+60*3); // az első paraméter a cokkie neve - ez az "id", a 2. paraméter, mi az érték, amit el akarunk térolni a cokkie-ban, 3., hogy mikor jár le. 4. site-nak melyik részére érvényes a cookie
+            //setcookie("id", $felhasznalo2["id"],time()+60*3); // az első paraméter a cokkie neve - ez az "id", a 2. paraméter, mi az érték, amit el akarunk térolni a cokkie-ban, 3., hogy mikor jár le. 4. site-nak melyik részére érvényes a cookie
 
 
             //$msg = "Sikeres bejelentkezés ".$felhasznalo2["valodi_nev"];
@@ -84,11 +72,7 @@ session_start();
         }
         catch(PDOException $e)
         {
-            $type="Adatbázis lekérdezési hiba!";
             $msg="Sikertelen lekérdezés: ".$e->getMessage();
-            //$apperror = new AppError();
-            $apperror->showModal($msg, $type);
-            $apperror->PutLog($msg);
         }
     }
 
@@ -106,21 +90,13 @@ session_start();
             if(empty($felhasznalonev) || empty($jelszo) || empty($jelszo2) || empty($email))
             {                
                     
-                $type="Regisztrációs hiba!";
-                $msg="Minden adatot kötelező megadni!";
-                $apperror = new AppError();
-                $apperror->showModal($msg, $type);
-                $apperror->PutLog($msg);
+                throw new Exception("Minden adatot kötelező megadni! Kérem, adja meg az összes adatot!"); 
                 
             }
                         
             if( $jelszo != $jelszo2)
             {                                
-                $type="Regisztrációs hiba!";
-                $msg="Hibás jelszó! Kérem, adja meg újra a jelszavát!";
-                //$apperror = new AppError();
-                $apperror->showModal($msg, $type);
-                $apperror->PutLog($msg);
+                throw new Exception("Hibás jelszó! Kérem, adja meg újra a jelszavát!")
             }
             
             $hash = password_hash($jelszo,PASSWORD_DEFAULT);//Ezzel lehet titkosítani a jelszót. 
@@ -136,11 +112,7 @@ session_start();
         }
         catch(PDOException $e)
         {            
-            $type="Adatbázis mentési hiba!";
             $msg="Sikertelen mentés! ".$e->getMessage();
-            $apperror = new AppError();
-            $apperror->showModal($msg, $type);
-            $apperror->PutLog($msg);
             return false;
         }
         return true;

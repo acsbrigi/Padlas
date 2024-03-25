@@ -1,9 +1,8 @@
 <?php
-require_once("view/header.html");
 require_once("model/config.php");
 require_once("model/database.php");
 require_once("model/storage.php");
-//require("controller/error.php");
+require("controller/error.php");
 
 // A BEJELENTKEZÉS ELVÉGZÉSÉHEZ AZ ALÁBBI VÁLTOZÓKRA LESZ SZÜKSÉGEM:
 $config = new Config("config/config.json"); 
@@ -12,7 +11,6 @@ $storage = new Storage($dbconn->getConnection());
 
 //MIELŐTT MÉG BETÖLTENÉNK A NÉZETET, ELŐTTE LEKÉRDEZZÜK A TÁROLÓKAT ÉS A BENNÜK LÉVŐ TERMÉKEK DARABSZÁMÁT ÍGY: 
 $storageArray = $storage->storageLoad(); // Itt hívom a függvényt, amiben a lekérdezés van. 
-require_once("view/storageListView.php"); // itt jelenítjük meg a lekérdezés eredményét. 
 
 
 // Ellenőrizzük, hogy az AJAX kérés történt-e: - ez ide már nem is kell! 
@@ -41,9 +39,11 @@ require_once("view/storageListView.php"); // itt jelenítjük meg a lekérdezés
     <title>Tárolók listája és új tároló létrehozása</title>
 </head>
 <body>
-    
-</body>
 <?php
+require_once("view/header.html");
+require_once("view/storageListView.php"); // itt jelenítjük meg a lekérdezés eredményét.
 require_once("view/footer.html");
 ?>
+</body>
+
 </html>

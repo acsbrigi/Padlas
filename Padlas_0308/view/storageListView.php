@@ -23,8 +23,8 @@
 
                 
                     <tr id = "<?= $singleStorage["id"]?>">
-                        <td><span><?= $singleStorage["taroloNev"]?></span></td>
-                        <td><span class=""><?= $singleStorage["keszlet"]?></span></td>
+                        <td><?= $singleStorage["taroloNev"]?></td>
+                        <td><?= $singleStorage["keszlet"]?></td>
                         <td><a href ="#"onclick="removeItemFromStorage(<?= $singleStorage["id"]?>)" class="kivetel"><i class="fa fa-arrow-right"></i></a></td>
                         <td><a href="#" onclick="deleteStorage(<?= $singleStorage["id"]?>)" class="torles"><i class="fa fa-trash"></i></a></td>
                     </tr>
@@ -49,11 +49,12 @@ Ez pedig egy AJAX kérést küld a szervernek,amely kérés egy PHP oldalt (a mo
         if (this.readyState == 4) {
             if (this.status == 200) {
                 const tr = document.createElement('tr');
+                tr.id = this.responseText;
                 tr.innerHTML = 
-                        '<td><span>'+this.responseText+'</span></td>'+
-                        '<td><span class="">0</span></td>'+
+                        '<td>'+this.responseText+'</td>'+
+                        '<td>0</td>'+
                         '<td><a href ="#"onlick="removeItemFromStorage('+this.responseText+')" class="kivetel"><i class="fa fa-arrow-right"></i></a></td>'+
-                        '<td><a href ="#" onlick="deleteStorage('+this.responseText+')"class="torles"><i class="fa fa-trash"></i></a></td>';
+                        '<td><a href ="#" onlick="deleteStorage('+this.responseText+', this)"class="torles"><i class="fa fa-trash"></i></a></td>';
                     document.getElementById('storagetable').appendChild(tr);
                 console.log(this.responseText);
             } else {
@@ -69,12 +70,17 @@ Ez pedig egy AJAX kérést küld a szervernek,amely kérés egy PHP oldalt (a mo
 
 
 function removeItemFromStorage(id){
+    if(!window.confirm('Ha kiveszed a termékeket a tárolóból, akkor a termékek törlődnek az alkalmazásból! Biztos, hogy folytatni akarod a termékek kivételét?')){
+        return 0;
+    }
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4) {
             if (this.status == 200) {
                 console.log("Sikeres AJAX kérés");
                 console.log(this.responseText);
+                const row = document.getElementById(id)
+                row.children[1].innerText ='0';
                 
             } else {
                 console.error("Hiba a kérés során");
@@ -87,7 +93,8 @@ function removeItemFromStorage(id){
 
 //TÁROLÓ TÖRLÉSE: VALAMIÉRT CSAK EGY KATTINTÁS EREJÉIG TÖRLŐDIK A SOR, HA KATTINTOK MÉG EGYET, AKKOR UTÁNA MÁR NEM. MI LEHET A BAJ? 
 
-function deleteStorage(id){
+function deleteStorage(id, obj){
+    console.log(obj);
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4) {
@@ -95,8 +102,10 @@ function deleteStorage(id){
                 console.log("Sikeres AJAX kérés");
                 console.log(this.responseText);
                 //  töröljük az adott sort a táblázatból, DE JELENLEG CSAK EGY KATTINTÁS EREJÉIG TÖRLI
-                var row = document.getElementById(<?= $singleStorage["id"]?>);
-                row.parentNode.removeChild(row);
+                //var row = document.getElementById(id);
+                var row = obj.parentElement.parentElement;
+                //console.log(row)
+                //row.parentNode.removeChild(row);
             } else {
                 console.error("Hiba a kérés során");
             }

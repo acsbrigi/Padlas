@@ -1,7 +1,7 @@
 <?php
 
 // MODEL BEEMELÉSE A KEZDŐOLDALRA:
-require_once("view/loginForm.php");
+
 require_once("model/config.php");
 require_once("model/database.php");
 require_once("model/user.php");
@@ -19,7 +19,18 @@ $userLogin;
 // HA A FELHASZNÁLÓ MEGADTA AZ ADATAIT, AKKOR AZT ELKÜLDÖM AZ ADATBÁZISNAK ÍGY:
 
 if(isset($_POST["submitLogin"])){
-  $userLogin = $user->getLoginUser($_POST['username'], $_POST['password']); // A felhasználónév és jelszó átadása
+  try{
+  $userLogin = $user->getLoginUser($_POST['username'], $_POST['password']);
+  $_SESSION["user"] = array("felhasznalonev"=>$userLogin["username"], "fullname"=>$userLogin["fullname"], "id"=>$userLogin["id"], "moderator"=>$userLogin["moderator"]); // itt megítjuk a session-t, hogy milyen adatokat adjon vissza
+  //létrehozok egy sessiont, aminek változója a "user" és a session user változójába berakok egy tömböt, mely tömb a felhasznalo2 változóba tárolt bejelentkezési adatokat adja vissza. 
+  //setcookie("id", $felhasznalo2["id"],time()+60*3); // az első paraméter a cokkie neve - ez az "id", a 2. paraméter, mi az érték, amit el akarunk térolni a cokkie-ban, 3., hogy mikor jár le. 4. site-nak melyik részére érvényes a cookie.
+  //$msg = "Sikeres bejelentkezés ".$felhasznalo2["valodi_nev"];
+  header("location:padlasMainPage.php"); // itt átirányítom a bejelentkezett oldalra a felhasználót. a header utasítást csak akkor lehet használni,ha nincs semmilyen kiírás az oldalon a header utasítás előtt, tehát a html5-ös törzs elé kell rakni., 
+
+  }catch(Exception $e){
+    $type="Bejelentkezési hiba!";
+    $msg=$e->getMessage();
+  }
 
 }
 
@@ -48,9 +59,17 @@ if(isset($_POST["submitLogin"])){
     <title>Bejelentkezés</title>
 </head>
 <body>
-
-</body>
 <?php
+if(!empty($msg)){
+  $apperror = new AppError();
+  $apperror ->showModal($msg, $type);
+  $apperror ->PutLog($msg); 
+}
+
+require_once("view/loginForm.php");
 require_once("view/footer.html");
 ?>
+
+</body>
+
 </html>
