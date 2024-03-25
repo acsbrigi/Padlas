@@ -54,7 +54,7 @@ Ez pedig egy AJAX kérést küld a szervernek,amely kérés egy PHP oldalt (a mo
                         '<td>'+this.responseText+'</td>'+
                         '<td>0</td>'+
                         '<td><a href ="#"onlick="removeItemFromStorage('+this.responseText+')" class="kivetel"><i class="fa fa-arrow-right"></i></a></td>'+
-                        '<td><a href ="#" onlick="deleteStorage('+this.responseText+', this)"class="torles"><i class="fa fa-trash"></i></a></td>';
+                        '<td><a href ="#" onlick="deleteStorage('+this.responseText+')"class="torles"><i class="fa fa-trash"></i></a></td>';
                     document.getElementById('storagetable').appendChild(tr);
                 console.log(this.responseText);
             } else {
@@ -66,7 +66,7 @@ Ez pedig egy AJAX kérést küld a szervernek,amely kérés egy PHP oldalt (a mo
     xhttp.send();
 }
 
-//II. TERMÉKEK TÖRLÉSE TÁROLÓBÓL - Itt kellene, hogy egyből frissüljön, hogy hány db termék vn az adott tárolóban. 
+//II. TERMÉKEK TÖRLÉSE TÁROLÓBÓL - Itt kellene, hogy egyből frissüljön, hogy hány db termék van az adott tárolóban. 
 
 
 function removeItemFromStorage(id){
@@ -91,9 +91,36 @@ function removeItemFromStorage(id){
     xhttp.send();
 }
 
-//TÁROLÓ TÖRLÉSE: VALAMIÉRT CSAK EGY KATTINTÁS EREJÉIG TÖRLŐDIK A SOR, HA KATTINTOK MÉG EGYET, AKKOR UTÁNA MÁR NEM. MI LEHET A BAJ? 
+//TÁROLÓ TÖRLÉSE: VALAMIÉRT FOLYAMATOSAN FLUGRIK AZ ALERT, NEM ENGEDI TÖRÖLNI A TERMÉKET. 
 
-function deleteStorage(id, obj){
+
+function deleteStorage(id){
+    var row = document.getElementById(id).parentElement.parentElement;
+    var keszlet = parseInt(row.children[1].innerText); // A tárolóban lévő termékek számának megszerzése
+
+    if(keszlet == 0){
+        // Ha a készlet 0, akkor az adott tároló törölhető
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4) {
+                if (this.status == 200) {
+                    console.log("Sikeres AJAX kérés");
+                    console.log(this.responseText);
+                    row.parentNode.removeChild(row); // Távolítsuk el a sort a táblából
+                } else {
+                    console.error("Hiba a kérés során");
+                }
+            }
+        };
+        xhttp.open("GET", "model/deleteStorage.php?id=" + id, true);
+        xhttp.send();
+    } else {
+        // Ha a készlet nagyobb, mint 0, akkor a tárolóban vannak termékek, és megjelenik egy figyelmeztetés
+        window.alert('A tárolóban termékek vannak, így azt nem lehet törölni!');
+    }
+}
+
+/* function deleteStorage(id,obj){
     console.log(obj);
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -104,7 +131,7 @@ function deleteStorage(id, obj){
                 //  töröljük az adott sort a táblázatból, DE JELENLEG CSAK EGY KATTINTÁS EREJÉIG TÖRLI
                 //var row = document.getElementById(id);
                 var row = obj.parentElement.parentElement;
-                //console.log(row)
+                //console.log(row);
                 //row.parentNode.removeChild(row);
             } else {
                 console.error("Hiba a kérés során");
@@ -113,6 +140,6 @@ function deleteStorage(id, obj){
     };
     xhttp.open("GET", "model/deleteStorage.php?id=" + id, true);
     xhttp.send();
-}
+} */
 
 </script>

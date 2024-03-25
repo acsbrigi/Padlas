@@ -8,6 +8,7 @@ require_once("model/user.php");
 require("controller/error.php");
 
 // A BEJELENTKEZÉS ELVÉGZÉSÉHEZ AZ ALÁBBI VÁLTOZÓKRA LESZ SZÜKSÉGEM:
+
 $apperror = new AppError();
 $config = new Config("config/config.json"); 
 $dbconn = new Database($config);
@@ -60,9 +61,10 @@ if(isset($_POST["submitLogin"])){
 </head>
 <body>
 <?php
+
 if(!empty($msg)){
   $apperror = new AppError();
-  $apperror ->showModal($msg, $type);
+  $apperror ->ShowModal($type, $msg);
   $apperror ->PutLog($msg); 
 }
 

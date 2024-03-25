@@ -11,7 +11,7 @@ $password2 = trim($_POST["topicDescription"]);
 //Hibakezelés - validálni kell, hogyha miden adat meg van adva és ki van töltve, akkor jönn ez: 
 
 if($user->newUserRegistration($username,$email,$password, $password2)){
-    //Ha sikerült az új téma létrehozása, akkor jelezzünk vissza a felhasználónak. 
+    //Ha sikerült az új felhasználó létrehozása, akkor jelezzünk vissza a felhasználónak. 
 }
 
 

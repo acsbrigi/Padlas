@@ -8,21 +8,27 @@ error_reporting(0);
 ini_set("display_error",1);
 
 //MODEL BEEMELÉSE
-require_once("view/registrationForm.php");
+
 require_once("model/config.php"); // beemeljük a model config.php-t - ez az 1., mert először szükségem van azadatbázis eléréséhez szükséges adatokra.
 require_once("model/database.php"); // beemeljük a model database.php-t - ez a 2., ert ezzel hozom létre azadatbázis kapcsolatot. 
 require_once("model/user.php"); // beemeljük a topic.php-t - ez a 3., mert már megvan az adatbázis kapcsolatom és ezzel tudom a témákat lekérdezni.
 require("controller/error.php");
 
-//
-//$error = new AppError();
+//REGISZTRÁCIÓHOZ AZ ALÁBI VÁLOTZÓKRA LESZ SZÜKSÉG: 
+$apperror = new AppError();
 $config = new Config("config/config.json"); 
 $dbconn = new Database($config);
 $user = new User($dbconn->getConnection());
 
 // ÚJ FELHASZNÁLÓ ELKÜLDÉSE AZ ADATBÁZISNAK:
 if(isset($_POST["submitRegistration"])){
+    try{
     require("controller/validateRegistration.php");
+    }
+    catch(Exception $e){
+      $type="Regisztrációs hiba!";
+      $msg=$e->getMessage();
+    }
   }
 
 ?>
@@ -40,9 +46,17 @@ if(isset($_POST["submitRegistration"])){
     <title>Regisztráció</title>
 </head>
 <body>
-    
-</body>
 <?php
+if(!empty($msg)){
+  $apperror = new AppError();
+  $apperror ->ShowModal($type, $msg);
+  $apperror ->PutLog($msg); 
+}
+
+
+require_once("view/registrationForm.php");
 require_once("view/footer.html");
 ?>
+</body>
+
 </html>

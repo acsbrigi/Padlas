@@ -96,7 +96,7 @@ session_start();
                         
             if( $jelszo != $jelszo2)
             {                                
-                throw new Exception("Hibás jelszó! Kérem, adja meg újra a jelszavát!")
+                throw new Exception("A két jelszó nem egyezik! Kérem, adja meg újra a jelszavát!");
             }
             
             $hash = password_hash($jelszo,PASSWORD_DEFAULT);//Ezzel lehet titkosítani a jelszót. 

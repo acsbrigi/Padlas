@@ -25,12 +25,12 @@ require_once("view/modifyUserDataForm.php");
 // IS ÁTVISZ A RENDSZER A BEJELENTKEZÉS OLDALRA, PEDIG NEM KELLENE. eZÉRT VAN ITT EZ A RÉSZ KIKOMMENTELVE. 
 //JAVÍTANI KELL!!!
 
-    /*$logoff = trim($_GET["submit"]);
+    $logoff = trim($_GET["submit"]);
     if (isset($logoff)){
         unset($_SESSION["user"]);
         //exit(header('Location:index.php'));
         ?><script><?php echo "location.href = 'index.php';";?></script><?php
-    }*/
+    }
 ?>
     
 </body>
