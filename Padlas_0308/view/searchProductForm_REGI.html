@@ -1,0 +1,116 @@
+<!--A termékkereső form-ot tartalmazza, annak a megjelenítéséért felel.-->
+
+</div>
+<div class="clearfix"></div>
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Termék kereső</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li> <!---Új termék létrehozása ikon a termék keresőben: ennek segítségével akár innen indulva is eljuthat a felhasználó az új termék létrehozás oldalra-->
+                            <a href="?command=uj_termek" title="Új termék">
+                                <span class="fa fa-plus"></span>
+                            </a>
+                        </li>                        
+                        <li><a onClick="nezetValtas('kepes')" title="Nézet"><span class="fa fa-th-large"></span></a></li>             
+                            <a href="?command=termek_kereso" title="Keresés törlése">
+                                <span class="fa fa-times red"></span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <form id="osszetett_kereso_form"  class="form-inline">
+                        <!-- Nem -->
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <div class="col-md-12 form-group has-feedback">
+                                    <label>Nem</label>
+                                    <select class="form-control has-feedback-left" id="raktar" name="raktar" >
+                                    <option value="1">Fiú</option>
+                                    <option value="2">Lány</option>
+                                    <option value="3">Unisex</option>
+                                    <span class="fa form-control-feedback left" aria-hidden="true"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Kategória: itt még meg kell csinálni, hogyha kiválasztja, hogy ruha, vagy cipő, akkor csak a hozzá tartozó alkategóriák
+                        jelenjenek meg, illetve a szülő kategória id-jét is el klne küldeni valahogy, de ezt még ki kell találnom. -->
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <div class="col-md-12 form-group has-feedback">
+                                    <label>Kategória</label>
+                                    <select class="form-control">
+                                    <option value="1">Ruha</option>
+                                    <option value="2">Cipő</option>
+                                    <option value="3">Felső</option>
+                                    <option value="4">Alsó</option>
+                                    <option value="5">Egybe ruha</option>
+                                    <option value="6">Kiegészítő</option>
+                                    <option value="7">Fehérnemű</option>
+                                    <option value="8">Szabadidőcipő</option>
+                                    <option value="9">Sportcipő</option>
+                                    <option value="10">Bakancs</option>
+                                    <option value="11">Papucs</option>
+                                    <option value="12">Szandál</option>
+                                    <option value="13">Körömcipő</option>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Méret: Ha a kiválasztott kategória cipő, akkor a cipő méretek jelenjenek meg, ha a kiválasztott kategória ruha, akkor a ruha méretek-->
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <div class="col-md-12 form-group has-feedback">
+                                    <label>Méret</label>
+                                    <select onChange="" class="form-control has-feedback-left" id="raktar" name="raktar">
+                                    <option value="1">XS</option><!--Ha a kiválasztott kategória value-ja 1-es, akkor ezek az opciók jelenjenek meg itt. -->
+                                    <option value="2">S</option>
+                                    <option value="3">M</option>
+                                    <option value="4">L</option>
+                                    <option value="5">XL</option>
+                                    <option value="6">XXL</option>
+                                    <!--Ha a kiválasztott kategória value-ja 2-es és a nem value-ja 2-es (nő), akkor az alábbi cipőméretek jelejenek meg: 35-től - 42-ig
+                                    Ha pedig a kiválasztott kategória value-ja 2-es és a nem value-ja 1-es, akkor az összes méret jelenjen meg. -->
+                                    <option value="7">35</option>
+                                    <option value="8">36</option>
+                                    <option value="9">37</option>
+                                    <option value="8">38</option>
+                                    <option value="8">39</option>
+                                    <option value="8">40</option>
+                                    <option value="8">41</option>
+                                    <option value="8">42</option>
+                                    <option value="8">43</option>
+                                    <option value="8">44</option>
+                                    <option value="8">45</option>
+                                    <option value="8">46</option>
+                                    <option value="8">47</option>
+                                    <span class="fa fa-archive form-control-feedback left" aria-hidden="true"></span>
+                                </div>
+                            </div>
+                        </div>
+                    
+                
+                        <!-- Tárolók -->
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <div class="col-md-12 form-group has-feedback">
+                                    <label>Tárolók</label>
+                                    <select onChange="kereses()" class="form-control has-feedback-left" id="raktar" name="raktar" >
+                                    <option value="">Összes raktár</option>
+                                    <!--Ide kellene az összesmeglévp tárolót egy-egy option-be begenerálni. Ehhez kellene egy függvény.-->
+                                    <option value="1" >Bolti raktár</option>
+                                    <option value="2" >Hibás termék</option>                               
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>   
+</div>
+
